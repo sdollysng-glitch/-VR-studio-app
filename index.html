@@ -1,0 +1,2114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+
+<title>VR Studio</title>
+
+<style>
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  background:#0B0E17;
+  color:#fff;
+  font:15px Arial,Helvetica,sans-serif;
+}
+
+button,input,textarea,select{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+.hide{
+  display:none!important;
+}
+
+/* ================= SPLASH ================= */
+
+#splash{
+  position:fixed;
+  inset:0;
+  display:grid;
+  place-items:center;
+  background:#0B0E17;
+  z-index:999;
+  transition:.5s;
+}
+
+.splash{
+  text-align:center;
+}
+
+.splash img{
+  width:min(900px,94vw);
+  max-height:75vh;
+  object-fit:contain;
+}
+
+.splash small{
+  display:block;
+  color:#6de4ff;
+  letter-spacing:3px;
+  margin-top:8px;
+}
+
+/* ================= AUTH ================= */
+
+.auth{
+  min-height:100vh;
+  display:grid;
+  place-items:center;
+  padding:20px;
+  background:
+    radial-gradient(circle at top,#12314a,#0B0E17 55%);
+}
+
+.box,
+.card{
+  background:
+    linear-gradient(145deg,#162233,#0b121d);
+  border:1px solid #42d9ff33;
+  border-radius:20px;
+  box-shadow:0 18px 50px #0008;
+}
+
+.box{
+  width:min(460px,95vw);
+  padding:24px;
+}
+
+.logo{
+  width:100%;
+  height:140px;
+  object-fit:contain;
+}
+
+.tabs{
+  display:flex;
+  gap:5px;
+  background:#07111b;
+  padding:5px;
+  border-radius:11px;
+  margin:15px 0;
+}
+
+.tabs button{
+  flex:1;
+  border:0;
+  background:transparent;
+  color:#8da3b5;
+  padding:10px;
+  border-radius:8px;
+}
+
+.tabs .on{
+  background:#17364c;
+  color:#fff;
+}
+
+label{
+  display:block;
+  color:#9bb0c2;
+  font-size:12px;
+  margin:10px 0 6px;
+}
+
+input,
+textarea,
+select{
+  width:100%;
+  padding:12px;
+  border-radius:10px;
+  border:1px solid #294050;
+  background:#07111b;
+  color:#fff;
+  outline:0;
+}
+
+input:focus,
+textarea:focus{
+  border-color:#42d9ff;
+}
+
+.btn{
+  padding:11px 14px;
+  border-radius:10px;
+  border:1px solid #31566a;
+  background:#102536;
+  color:#fff;
+}
+
+.primary{
+  width:100%;
+  background:linear-gradient(135deg,#087fc7,#174fd5);
+  border:0;
+}
+
+/* ================= ADMIN LOGIN ================= */
+
+.admin{
+  margin-top:15px;
+  padding:14px;
+  border:1px dashed #2d6b80;
+  border-radius:13px;
+}
+
+.switch{
+  float:right;
+}
+
+/* ================= APP ================= */
+
+.app{
+  display:none;
+  padding-bottom:78px;
+}
+
+.top{
+  height:68px;
+  position:sticky;
+  top:0;
+  z-index:4;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:8px 15px;
+  background:#080d15ee;
+  border-bottom:1px solid #42d9ff22;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-weight:bold;
+}
+
+.brand img{
+  width:45px;
+  height:45px;
+  object-fit:contain;
+}
+
+.role{
+  font-size:10px;
+  padding:8px;
+  border-radius:99px;
+  background:#0d2130;
+  color:#7de6ff;
+}
+
+.content{
+  width:min(1100px,94%);
+  margin:auto;
+  padding:22px 0;
+}
+
+.page{
+  display:none;
+}
+
+.page.on{
+  display:block;
+}
+
+.card{
+  padding:20px;
+  margin-bottom:15px;
+}
+
+.hero{
+  padding:27px;
+}
+
+.muted{
+  color:#91a6b8;
+  line-height:1.5;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:
+    repeat(auto-fit,minmax(250px,1fr));
+  gap:15px;
+}
+
+/* ================= GAMES ================= */
+
+.game{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  padding:13px;
+  margin-top:9px;
+  background:#0b1722;
+  border:1px solid #fff1;
+  border-radius:12px;
+}
+
+.game p{
+  margin:4px 0 0;
+  color:#8197a9;
+  font-size:12px;
+}
+
+.actions{
+  display:flex;
+  gap:5px;
+  flex-wrap:wrap;
+}
+
+/* ================= ADMIN CONTROLS ================= */
+
+.adminOnly{
+  display:none;
+}
+
+.adminMode .adminOnly{
+  display:block;
+}
+
+/* ================= BOTTOM NAV ================= */
+
+.nav{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  height:76px;
+  z-index:5;
+  background:#070b12f5;
+  border-top:1px solid #42d9ff22;
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+}
+
+.nav button{
+  border:0;
+  background:transparent;
+  color:#718799;
+  font-size:10px;
+}
+
+.nav .on{
+  color:#60dfff;
+}
+
+.nav b{
+  display:block;
+  font-size:18px;
+  margin-bottom:3px;
+}
+
+/* ================= COMMUNITY ================= */
+
+.chat{
+  height:280px;
+  overflow:auto;
+  background:#07111b;
+  padding:10px;
+  border-radius:12px;
+}
+
+.msg{
+  background:#102130;
+  padding:8px;
+  border-radius:10px;
+  margin-bottom:7px;
+}
+
+.chatrow{
+  display:flex;
+  gap:7px;
+  margin-top:8px;
+}
+
+.chatrow input{
+  flex:1;
+}
+
+/* ================= GAME LAUNCHER ================= */
+
+.launcher{
+  position:fixed;
+  inset:0;
+  z-index:20;
+  background:#000;
+  display:none;
+  flex-direction:column;
+}
+
+.launchbar{
+  height:55px;
+  background:#0b1420;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:8px;
+}
+
+.frame{
+  flex:1;
+  border:0;
+}
+
+/* ================= TOAST ================= */
+
+.toast{
+  position:fixed;
+  right:15px;
+  bottom:90px;
+  background:#132637;
+  border:1px solid #42d9ff55;
+  padding:12px;
+  border-radius:10px;
+  z-index:99;
+}
+
+@media(max-width:600px){
+
+  .game{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .hero{
+    padding:22px;
+  }
+
+}
+</style>
+</head>
+
+<body>
+
+<!-- =====================================================
+     SPLASH SCREEN
+     Replace YOUR_LOGO_HERE.png with your logo filename
+     ===================================================== -->
+
+<div id="splash">
+
+  <div class="splash">
+
+    <img src="YOUR_LOGO_HERE.png">
+
+    <small>
+      IMMERSIVE VIRTUAL REALITY
+    </small>
+
+  </div>
+
+</div>
+
+
+<!-- =====================================================
+     SIGN UP / LOGIN
+     ===================================================== -->
+
+<section id="auth" class="auth">
+
+  <div class="box">
+
+    <img
+      class="logo"
+      src="YOUR_LOGO_HERE.png"
+    >
+
+    <h1 id="authTitle">
+      Create Your Account
+    </h1>
+
+    <p class="muted">
+      Sign up to enter VR Studio and access the arcade.
+    </p>
+
+
+    <div class="tabs">
+
+      <button
+        id="signup"
+        class="on"
+        onclick="mode('signup')">
+
+        Sign Up
+
+      </button>
+
+      <button
+        id="login"
+        onclick="mode('login')">
+
+        Log In
+
+      </button>
+
+    </div>
+
+
+    <label>
+      Email
+    </label>
+
+    <input
+      id="email"
+      type="email"
+      placeholder="you@example.com"
+    >
+
+
+    <label>
+      Password
+    </label>
+
+    <input
+      id="pass"
+      type="password"
+      placeholder="Create a password"
+    >
+
+
+    <button
+      id="account"
+      class="btn primary"
+      onclick="account()">
+
+      Create Account
+
+    </button>
+
+
+    <button
+      class="btn"
+      style="width:100%;margin-top:8px"
+      onclick="google()">
+
+      Continue with Google
+
+    </button>
+
+
+    <button
+      class="btn"
+      style="width:100%;margin-top:8px"
+      onclick="guest()">
+
+      Continue as Guest
+
+    </button>
+
+
+    <!-- ADMIN -->
+
+    <div class="admin">
+
+      <b>
+        👑 Owner / Admin
+      </b>
+
+      <p class="muted">
+        Turn this on only if you are the owner.
+      </p>
+
+
+      <label>
+        <input
+          id="adminSwitch"
+          type="checkbox"
+          onchange="adminBox()"
+        >
+
+        Owner / Admin Mode
+      </label>
+
+
+      <div
+        id="adminArea"
+        class="hide">
+
+        <label>
+          Owner / Admin Password
+        </label>
+
+        <input
+          id="adminPass"
+          type="password"
+          placeholder="Enter owner password"
+        >
+
+
+        <button
+          class="btn"
+          style="margin-top:8px;width:100%"
+          onclick="verify()">
+
+          Enter Owner / Admin Mode
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =====================================================
+     MAIN APP
+     ===================================================== -->
+
+<div id="app" class="app">
+
+
+<header class="top">
+
+  <div class="brand">
+
+    <img
+      src="YOUR_LOGO_HERE.png"
+    >
+
+    <span>
+      VR STUDIO
+    </span>
+
+  </div>
+
+
+  <span
+    id="role"
+    class="role">
+
+    PLAYER MODE
+
+  </span>
+
+</header>
+
+
+<main class="content">
+
+
+<!-- ================= ARCADE ================= -->
+
+<section
+  id="arcade"
+  class="page on">
+
+  <div class="card hero">
+
+    <h1>
+      Welcome to VR Studio
+    </h1>
+
+    <p class="muted">
+      Play web games, explore featured projects,
+      join the community and contact the developer.
+    </p>
+
+
+    <div class="adminOnly">
+
+      <button
+        class="btn primary"
+        onclick="openPage('admin')">
+
+        👑 Open Admin Dashboard
+
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <div class="card">
+
+    <h2>
+      🎮 Arcade
+    </h2>
+
+    <div id="games"></div>
+
+  </div>
+
+</section>
+
+
+<!-- ================= FEATURED ================= -->
+
+<section
+  id="featured"
+  class="page">
+
+  <div class="card">
+
+    <h2>
+      ⭐ Featured
+    </h2>
+
+    <div id="featuredGames"></div>
+
+  </div>
+
+</section>
+
+
+<!-- ================= COMMUNITY ================= -->
+
+<section
+  id="community"
+  class="page">
+
+  <div class="card">
+
+    <h2>
+      💬 Community Lounge
+    </h2>
+
+
+    <div
+      id="chat"
+      class="chat">
+    </div>
+
+
+    <div class="chatrow">
+
+      <input
+        id="chatInput"
+        placeholder="Write a message..."
+        onkeydown="
+          if(event.key==='Enter')sendMsg()
+        "
+      >
+
+      <button
+        class="btn"
+        onclick="sendMsg()">
+
+        Send
+
+      </button>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ================= SUPPORT ================= -->
+
+<section
+  id="support"
+  class="page">
+
+  <div class="card">
+
+    <h2>
+      🛠️ Support
+    </h2>
+
+
+    <label>
+      Type
+    </label>
+
+    <select id="stype">
+
+      <option>
+        Bug Report
+      </option>
+
+      <option>
+        Complaint
+      </option>
+
+      <option>
+        Suggestion
+      </option>
+
+    </select>
+
+
+    <label>
+      Message
+    </label>
+
+    <textarea
+      id="smsg"
+      rows="5">
+    </textarea>
+
+
+    <button
+      class="btn primary"
+      style="margin-top:10px"
+      onclick="support()">
+
+      Send Support Request
+
+    </button>
+
+  </div>
+
+</section>
+
+
+<!-- ================= PROFILE ================= -->
+
+<section
+  id="profile"
+  class="page">
+
+  <div class="card">
+
+    <h2>
+      👤 Profile
+    </h2>
+
+    <div id="profileData"></div>
+
+
+    <button
+      class="btn"
+      style="margin-top:12px"
+      onclick="logout()">
+
+      Log Out
+
+    </button>
+
+  </div>
+
+</section>
+
+
+<!-- ================= ADMIN ================= -->
+
+<section
+  id="admin"
+  class="page adminOnly">
+
+  <div class="card">
+
+    <h2>
+      👑 Owner / Admin Dashboard
+    </h2>
+
+    <p class="muted">
+      Only verified owners can access these controls.
+    </p>
+
+  </div>
+
+
+  <div class="grid">
+
+
+    <!-- PUBLISH -->
+
+    <div class="card">
+
+      <h3>
+        🚀 Publish Web Game
+      </h3>
+
+
+      <label>
+        Game Name
+      </label>
+
+      <input
+        id="gname"
+        placeholder="City Rush"
+      >
+
+
+      <label>
+        Game URL
+      </label>
+
+      <input
+        id="gurl"
+        placeholder="https://example.com/game"
+      >
+
+
+      <label>
+        Description
+      </label>
+
+      <textarea
+        id="gdesc"
+        rows="4">
+      </textarea>
+
+
+      <button
+        class="btn primary"
+        style="margin-top:10px"
+        onclick="publish()">
+
+        Publish Game
+
+      </button>
+
+    </div>
+
+
+    <!-- PROJECT -->
+
+    <div class="card">
+
+      <h3>
+        📅 Upcoming Project
+      </h3>
+
+
+      <label>
+        Project Name
+      </label>
+
+      <input
+        id="pname"
+      >
+
+
+      <label>
+        Status
+      </label>
+
+      <input
+        id="pstatus"
+        placeholder="In Development"
+      >
+
+
+      <button
+        class="btn"
+        style="margin-top:10px"
+        onclick="project()">
+
+        Save Project
+
+      </button>
+
+
+      <div id="projects"></div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+</main>
+
+
+<!-- ================= BOTTOM NAV ================= -->
+
+<nav class="nav">
+
+  <button
+    class="on"
+    data-p="arcade"
+    onclick="openPage('arcade')">
+
+    <b>🎮</b>
+    Arcade
+
+  </button>
+
+
+  <button
+    data-p="featured"
+    onclick="openPage('featured')">
+
+    <b>⭐</b>
+    Featured
+
+  </button>
+
+
+  <button
+    data-p="community"
+    onclick="openPage('community')">
+
+    <b>💬</b>
+    Community
+
+  </button>
+
+
+  <button
+    data-p="support"
+    onclick="openPage('support')">
+
+    <b>🛠️</b>
+    Support
+
+  </button>
+
+
+  <button
+    data-p="profile"
+    onclick="openPage('profile')">
+
+    <b>👤</b>
+    Profile
+
+  </button>
+
+</nav>
+
+</div>
+
+
+<!-- =====================================================
+     GAME LAUNCHER
+     ===================================================== -->
+
+<div
+  id="launcher"
+  class="launcher">
+
+  <div class="launchbar">
+
+    <b id="gameTitle">
+      Game
+    </b>
+
+
+    <button
+      class="btn"
+      onclick="exitGame()">
+
+      Exit Game
+
+    </button>
+
+  </div>
+
+
+  <iframe
+    id="frame"
+    class="frame">
+  </iframe>
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   ADMIN PASSWORD
+   ===================================================== */
+
+const ADMIN_PASSWORD = "VR#owner/team";
+
+
+/* =====================================================
+   VARIABLES
+   ===================================================== */
+
+let admin = false;
+
+let user = null;
+
+let authMode = "signup";
+
+
+const defaultGames = [
+
+  {
+    name:"City Rush",
+
+    url:"",
+
+    description:
+      "Open-world city driving project.",
+
+    featured:true
+  }
+
+];
+
+
+const $ = id =>
+  document.getElementById(id);
+
+
+/* =====================================================
+   TOAST
+   ===================================================== */
+
+function toast(message){
+
+  const t =
+    document.createElement("div");
+
+  t.className = "toast";
+
+  t.textContent = message;
+
+  document.body.appendChild(t);
+
+  setTimeout(
+    () => t.remove(),
+    2500
+  );
+
+}
+
+
+/* =====================================================
+   ESCAPE HTML
+   ===================================================== */
+
+function esc(value){
+
+  return String(value ?? "")
+    .replace(
+      /[&<>"']/g,
+
+      c => ({
+
+        "&":"&amp;",
+        "<":"&lt;",
+        ">":"&gt;",
+        '"':"&quot;",
+        "'":"&#039;"
+
+      }[c])
+
+    );
+
+}
+
+
+/* =====================================================
+   2 SECOND SPLASH
+   ===================================================== */
+
+setTimeout(() => {
+
+  $("splash").style.opacity = 0;
+
+  setTimeout(() => {
+
+    $("splash").remove();
+
+    $("auth")
+      .classList
+      .remove("hide");
+
+  },500);
+
+},2000);
+
+
+/* =====================================================
+   SIGN UP / LOGIN
+   ===================================================== */
+
+function mode(m){
+
+  authMode = m;
+
+  $("signup")
+    .classList
+    .toggle(
+      "on",
+      m === "signup"
+    );
+
+  $("login")
+    .classList
+    .toggle(
+      "on",
+      m === "login"
+    );
+
+
+  $("authTitle").textContent =
+    m === "signup"
+      ? "Create Your Account"
+      : "Welcome Back";
+
+
+  $("account").textContent =
+    m === "signup"
+      ? "Create Account"
+      : "Log In";
+
+}
+
+
+/* =====================================================
+   ACCOUNT
+   ===================================================== */
+
+function account(){
+
+  const email =
+    $("email").value.trim();
+
+  const password =
+    $("pass").value;
+
+
+  if(!email || !password){
+
+    return toast(
+      "Enter email and password."
+    );
+
+  }
+
+
+  let users =
+    JSON.parse(
+      localStorage.vrUsers || "{}"
+    );
+
+
+  if(authMode === "signup"){
+
+    if(users[email]){
+
+      return toast(
+        "Account already exists."
+      );
+
+    }
+
+
+    users[email] = {
+
+      email:email,
+
+      password:password,
+
+      name:
+        email.split("@")[0]
+
+    };
+
+
+    localStorage.vrUsers =
+      JSON.stringify(users);
+
+  }
+
+
+  else{
+
+    if(
+      !users[email] ||
+      users[email].password !== password
+    ){
+
+      return toast(
+        "Incorrect email or password."
+      );
+
+    }
+
+  }
+
+
+  user = {
+
+    name:users[email].name,
+
+    email:email,
+
+    guest:false
+
+  };
+
+
+  enter();
+
+}
+
+
+/* =====================================================
+   GOOGLE
+   ===================================================== */
+
+function google(){
+
+  toast(
+    "Google Sign-In needs OAuth/backend setup."
+  );
+
+}
+
+
+/* =====================================================
+   GUEST
+   ===================================================== */
+
+function guest(){
+
+  user = {
+
+    name:"Guest Player",
+
+    email:"guest",
+
+    guest:true
+
+  };
+
+  enter();
+
+}
+
+
+/* =====================================================
+   ADMIN PASSWORD BOX
+   ===================================================== */
+
+function adminBox(){
+
+  $("adminArea")
+    .classList
+    .toggle(
+      "hide",
+      !$("adminSwitch").checked
+    );
+
+}
+
+
+/* =====================================================
+   VERIFY ADMIN
+   ===================================================== */
+
+function verify(){
+
+  const entered =
+    $("adminPass").value;
+
+
+  if(
+    entered !== ADMIN_PASSWORD
+  ){
+
+    admin = false;
+
+    return toast(
+      "Wrong admin password. Player mode remains active."
+    );
+
+  }
+
+
+  admin = true;
+
+
+  user = {
+
+    name:"Owner / Admin",
+
+    email:"owner@vrstudio.local"
+
+  };
+
+
+  enter();
+
+
+  toast(
+    "Owner/Admin mode enabled."
+  );
+
+}
+
+
+/* =====================================================
+   ENTER APP
+   ===================================================== */
+
+function enter(){
+
+  $("auth")
+    .classList
+    .add("hide");
+
+
+  $("app").style.display =
+    "block";
+
+
+  document.body
+    .classList
+    .toggle(
+      "adminMode",
+      admin
+    );
+
+
+  $("role").textContent =
+    admin
+      ? "OWNER / ADMIN MODE"
+      : "PLAYER MODE";
+
+
+  profile();
+
+  games();
+
+  featured();
+
+  chat();
+
+  projects();
+
+}
+
+
+/* =====================================================
+   LOGOUT
+   ===================================================== */
+
+function logout(){
+
+  location.reload();
+
+}
+
+
+/* =====================================================
+   PAGE NAVIGATION
+   ===================================================== */
+
+function openPage(id){
+
+  if(
+    id === "admin" &&
+    !admin
+  ){
+
+    return toast(
+      "Owner/Admin verification required."
+    );
+
+  }
+
+
+  document
+    .querySelectorAll(".page")
+    .forEach(
+      x => x.classList.remove("on")
+    );
+
+
+  $(id)
+    .classList
+    .add("on");
+
+
+  document
+    .querySelectorAll(".nav button")
+    .forEach(
+      x =>
+        x.classList.toggle(
+          "on",
+          x.dataset.p === id
+        )
+    );
+
+
+  scrollTo(0,0);
+
+}
+
+
+/* =====================================================
+   PROFILE
+   ===================================================== */
+
+function profile(){
+
+  $("profileData").innerHTML = `
+
+    <p class="muted">
+      Name
+    </p>
+
+    <b>
+      ${esc(user.name)}
+    </b>
+
+
+    <p class="muted">
+      Email
+    </p>
+
+    <b>
+      ${esc(user.email)}
+    </b>
+
+
+    <p class="muted">
+      Access
+    </p>
+
+    <b>
+      ${
+        admin
+          ? "Owner / Admin"
+          : user.guest
+            ? "Guest Player"
+            : "Player"
+      }
+    </b>
+
+  `;
+
+}
+
+
+/* =====================================================
+   GET GAMES
+   ===================================================== */
+
+function getGames(){
+
+  return JSON.parse(
+    localStorage.vrGames ||
+    JSON.stringify(defaultGames)
+  );
+
+}
+
+
+function saveGames(games){
+
+  localStorage.vrGames =
+    JSON.stringify(games);
+
+}
+
+
+/* =====================================================
+   SHOW GAMES
+   ===================================================== */
+
+function games(){
+
+  const list =
+    getGames();
+
+
+  $("games").innerHTML =
+    list.length
+
+    ?
+
+    list.map(
+      (g,i) => `
+
+      <div class="game">
+
+        <div>
+
+          <b>
+            ${esc(g.name)}
+          </b>
+
+          <p>
+            ${esc(g.description)}
+          </p>
+
+        </div>
+
+
+        <div class="actions">
+
+          ${
+            g.url
+
+            ?
+
+            `<button
+              class="btn"
+              onclick="play(${i})">
+
+              Play
+
+            </button>`
+
+            :
+
+            `<button
+              class="btn">
+
+              Coming Soon
+
+            </button>`
+          }
+
+
+          ${
+            admin
+
+            ?
+
+            `
+            <button
+              class="btn"
+              onclick="feature(${i})">
+
+              ${
+                g.featured
+                  ? "Unfeature"
+                  : "Feature"
+              }
+
+            </button>
+
+
+            <button
+              class="btn"
+              onclick="del(${i})">
+
+              Delete
+
+            </button>
+            `
+
+            : ""
+          }
+
+        </div>
+
+      </div>
+
+      `
+    ).join("")
+
+    :
+
+    `<p class="muted">
+      No games published.
+    </p>`;
+
+}
+
+
+/* =====================================================
+   FEATURED
+   ===================================================== */
+
+function featured(){
+
+  const list =
+    getGames()
+      .filter(x => x.featured);
+
+
+  $("featuredGames").innerHTML =
+
+    list.length
+
+    ?
+
+    list.map(
+      g => `
+
+      <div class="game">
+
+        <div>
+
+          <b>
+            ${esc(g.name)}
+          </b>
+
+          <p>
+            ${esc(g.description)}
+          </p>
+
+        </div>
+
+        <b style="color:#6de4ff">
+          FEATURED
+        </b>
+
+      </div>
+
+      `
+    ).join("")
+
+    :
+
+    `<p class="muted">
+      No featured games.
+    </p>`;
+
+}
+
+
+/* =====================================================
+   PUBLISH GAME
+   ===================================================== */
+
+function publish(){
+
+  if(!admin)
+    return;
+
+
+  const name =
+    $("gname").value.trim();
+
+  const url =
+    $("gurl").value.trim();
+
+  const description =
+    $("gdesc").value.trim();
+
+
+  if(!name || !url){
+
+    return toast(
+      "Enter game name and URL."
+    );
+
+  }
+
+
+  const list =
+    getGames();
+
+
+  list.push({
+
+    name:name,
+
+    url:url,
+
+    description:
+      description ||
+      "VR Studio Web Game",
+
+    featured:false
+
+  });
+
+
+  saveGames(list);
+
+
+  $("gname").value = "";
+
+  $("gurl").value = "";
+
+  $("gdesc").value = "";
+
+
+  games();
+
+  featured();
+
+
+  toast(
+    "Game published."
+  );
+
+}
+
+
+/* =====================================================
+   DELETE GAME
+   ===================================================== */
+
+function del(index){
+
+  const list =
+    getGames();
+
+
+  list.splice(index,1);
+
+
+  saveGames(list);
+
+
+  games();
+
+  featured();
+
+
+  toast(
+    "Game deleted."
+  );
+
+}
+
+
+/* =====================================================
+   FEATURE / UNFEATURE
+   ===================================================== */
+
+function feature(index){
+
+  const list =
+    getGames();
+
+
+  list[index].featured =
+    !list[index].featured;
+
+
+  saveGames(list);
+
+
+  games();
+
+  featured();
+
+}
+
+
+/* =====================================================
+   GAME PLAYER
+   ===================================================== */
+
+function play(index){
+
+  const game =
+    getGames()[index];
+
+
+  if(!game.url)
+    return;
+
+
+  $("gameTitle").textContent =
+    game.name;
+
+
+  $("frame").src =
+    game.url;
+
+
+  $("launcher")
+    .style
+    .display = "flex";
+
+}
+
+
+/* =====================================================
+   EXIT GAME
+   ===================================================== */
+
+function exitGame(){
+
+  $("frame").src =
+    "about:blank";
+
+
+  $("launcher")
+    .style
+    .display = "none";
+
+}
+
+
+/* =====================================================
+   COMMUNITY CHAT
+   ===================================================== */
+
+function sendMsg(){
+
+  const text =
+    $("chatInput")
+      .value
+      .trim();
+
+
+  if(!text)
+    return;
+
+
+  const list =
+    JSON.parse(
+      localStorage.vrChat ||
+      "[]"
+    );
+
+
+  list.push({
+
+    name:user.name,
+
+    text:text,
+
+    time:
+      new Date()
+        .toLocaleTimeString()
+
+  });
+
+
+  localStorage.vrChat =
+    JSON.stringify(list);
+
+
+  $("chatInput").value =
+    "";
+
+
+  chat();
+
+}
+
+
+function chat(){
+
+  const list =
+    JSON.parse(
+      localStorage.vrChat ||
+      "[]"
+    );
+
+
+  const messages =
+    list.length
+
+    ?
+
+    list
+
+    :
+
+    [
+
+      {
+
+        name:"VR Studio",
+
+        text:
+          "Welcome to the Community Lounge!",
+
+        time:""
+
+      }
+
+    ];
+
+
+  $("chat").innerHTML =
+    messages.map(
+      x => `
+
+      <div class="msg">
+
+        <b>
+          ${esc(x.name)}
+        </b>
+
+        <small>
+          ${esc(x.time)}
+        </small>
+
+        <div>
+          ${esc(x.text)}
+        </div>
+
+      </div>
+
+      `
+    ).join("");
+
+}
+
+
+/* =====================================================
+   SUPPORT
+   ===================================================== */
+
+function support(){
+
+  const message =
+    $("smsg")
+      .value
+      .trim();
+
+
+  if(!message){
+
+    return toast(
+      "Write a support message."
+    );
+
+  }
+
+
+  const list =
+    JSON.parse(
+      localStorage.vrSupport ||
+      "[]"
+    );
+
+
+  list.push({
+
+    type:
+      $("stype").value,
+
+    message:message,
+
+    user:user.email,
+
+    time:
+      new Date()
+        .toISOString()
+
+  });
+
+
+  localStorage.vrSupport =
+    JSON.stringify(list);
+
+
+  $("smsg").value =
+    "";
+
+
+  toast(
+    "Support request submitted."
+  );
+
+}
+
+
+/* =====================================================
+   UPCOMING PROJECT
+   ===================================================== */
+
+function project(){
+
+  if(!admin)
+    return;
+
+
+  const name =
+    $("pname")
+      .value
+      .trim();
+
+
+  const status =
+    $("pstatus")
+      .value
+      .trim();
+
+
+  if(!name){
+
+    return toast(
+      "Enter project name."
+    );
+
+  }
+
+
+  const list =
+    JSON.parse(
+      localStorage.vrProjects ||
+      "[]"
+    );
+
+
+  list.push({
+
+    name:name,
+
+    status:
+      status ||
+      "In Development"
+
+  });
+
+
+  localStorage.vrProjects =
+    JSON.stringify(list);
+
+
+  $("pname").value = "";
+
+  $("pstatus").value = "";
+
+
+  projects();
+
+
+  toast(
+    "Project saved."
+  );
+
+}
+
+
+/* =====================================================
+   PROJECT LIST
+   ===================================================== */
+
+function projects(){
+
+  const list =
+    JSON.parse(
+      localStorage.vrProjects ||
+      "[]"
+    );
+
+
+  $("projects").innerHTML =
+    list.map(
+      x => `
+
+      <div class="game">
+
+        <div>
+
+          <b>
+            ${esc(x.name)}
+          </b>
+
+          <p>
+            ${esc(x.status)}
+          </p>
+
+        </div>
+
+      </div>
+
+      `
+    ).join("");
+
+}
+
+</script>
+
+</body>
+</html>
